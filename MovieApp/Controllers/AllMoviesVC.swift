@@ -262,7 +262,7 @@ class AllMoviesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         return 2.0
     }
     
-    
+     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         
         return 2.0

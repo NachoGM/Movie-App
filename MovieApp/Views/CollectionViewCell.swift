@@ -7,7 +7,7 @@
 //
 
 import UIKit
- 
+  
 class CollectionViewCell: UICollectionViewCell {
     
     // Movies

@@ -15,7 +15,7 @@ class JobsDetailedVC: UIViewController {
     @IBOutlet weak var jobsLbl: UITextView!
     @IBOutlet weak var applyBtn: UIButton!
     
-    
+     
     // MARKS: Display Vars here
     var jobs: String!
 
