@@ -37,7 +37,7 @@ class SettingsVC: UIViewController {
         
         return .lightContent
     }
-  
+   
      
     // MARKS: JSON Auth
     func jsonAuth() {

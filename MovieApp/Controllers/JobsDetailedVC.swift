@@ -14,7 +14,7 @@ class JobsDetailedVC: UIViewController {
     // MARKS: Display Outlets here
     @IBOutlet weak var jobsLbl: UITextView!
     @IBOutlet weak var applyBtn: UIButton!
-     
+      
      
     // MARKS: Display Vars here
     var jobs: String!
