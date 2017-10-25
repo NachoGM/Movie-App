@@ -72,7 +72,7 @@ class MovieDetailedVC: UIViewController {
 
             baseBlueView.isHidden = true
             baseDetailView.isHidden = false
-   
+    
         case 1:
             print("Watch")
  

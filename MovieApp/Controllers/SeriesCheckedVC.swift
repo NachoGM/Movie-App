@@ -15,7 +15,7 @@ class SeriesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     // MARKS: Declare Outlets here
     @IBOutlet weak var tableView: UITableView!
     
-    
+     
     // vars 4 Core Data
     var series: [Series] = []
     var dates: [Series] = []

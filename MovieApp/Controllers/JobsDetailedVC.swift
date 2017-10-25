@@ -10,7 +10,7 @@ import UIKit
 
 class JobsDetailedVC: UIViewController {
     
-    
+     
     // MARKS: Display Outlets here
     @IBOutlet weak var jobsLbl: UITextView!
     @IBOutlet weak var applyBtn: UIButton!

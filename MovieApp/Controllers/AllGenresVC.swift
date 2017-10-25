@@ -77,7 +77,7 @@ class AllGenresVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                 })
             }
         }
-     }
+     } 
        
      
     // MARKS: Generate random color 4 cells

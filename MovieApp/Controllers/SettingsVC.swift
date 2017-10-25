@@ -31,7 +31,7 @@ class SettingsVC: UIViewController {
         jsonAuth()
     }
 
-    
+     
     // MARKS: Modify Status Bar Color
     override var preferredStatusBarStyle: UIStatusBarStyle {
         
