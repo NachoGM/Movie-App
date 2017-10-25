@@ -126,7 +126,7 @@ class AllSeriesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                         
                         let popularity = aObject["popularity"] as? Double;
                         self.popularityArray.append(Double(popularity!))
-                         
+                          
                         let poster = aObject["poster_path"] as? String;
                         self.imageArray.append(poster!)
                          

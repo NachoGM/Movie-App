@@ -26,7 +26,7 @@ class SeriesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     var overviews: [Series] = []
     var popularities: [Series] = []
     var votes: [Series] = []
-  
+   
     var allSeries: [String] = []
     var allDates: [String] = []
     var allIds: [Int32] = []

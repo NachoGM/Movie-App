@@ -5,7 +5,7 @@
 //  Created by Nacho MAC on 23/10/2017.
 //  Copyright © 2017 Nacho MAC. All rights reserved.
 //
- 
+  
 import UIKit
  
 class TableViewCell: UITableViewCell {

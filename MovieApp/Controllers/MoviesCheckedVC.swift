@@ -141,7 +141,7 @@ class MoviesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         cell.overviewLbl.text = allOverviews[indexPath.row]
         cell.dateMovieLbl.text = allDates[indexPath.row]
         cell.likesMovieLbl.text = "\(allPopularities[indexPath.row])"
-         
+          
         // Customice white view
         cell.whiteView.layer.cornerRadius = 10
         cell.whiteView.layer.shadowOpacity = 0.1
