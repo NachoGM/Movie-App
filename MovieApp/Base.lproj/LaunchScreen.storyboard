@@ -1,10 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="MarkerFeltThin.ttf">
+            <string>MarkerFelt-Thin</string>
+        </array>
+        <array key="MarkerFeltWide.ttf">
+            <string>MarkerFelt-Wide</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -13,13 +25,82 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie App" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Ti-lI-wJx">
+                                <rect key="frame" x="91" y="261" width="193" height="145"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="7Ti-lI-wJx" secondAttribute="height" multiplier="193:145" id="B1K-lD-Ntr"/>
+                                    <constraint firstAttribute="height" constant="145" id="NHZ-UM-odP"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="193" id="y3U-K2-HLA"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="40"/>
+                                <color key="textColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nacho González Miró" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MmW-Gi-qgj">
+                                <rect key="frame" x="0.0" y="567" width="375" height="49"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="49" id="2DK-va-rdf"/>
+                                    <constraint firstAttribute="width" secondItem="MmW-Gi-qgj" secondAttribute="height" multiplier="375:49" id="Bj7-kC-iPM"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="375" id="bnK-4L-muO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="nacho@enalcoi.info" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mUv-Ur-C2d">
+                                <rect key="frame" x="0.0" y="598" width="375" height="49"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="49" id="8oX-h2-iPg"/>
+                                    <constraint firstAttribute="width" secondItem="mUv-Ur-C2d" secondAttribute="height" multiplier="375:49" id="kqD-yp-iyp"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="375" id="vyE-27-Pam"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+34 620 44 02 12" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fzv-du-4Yq">
+                                <rect key="frame" x="122" y="629" width="131.5" height="18.5"/>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Assesstment 4 Desarrollo Mobile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GbL-9v-XqN">
+                                <rect key="frame" x="0.0" y="261" width="375" height="49"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="375" id="6s0-Pe-4gu"/>
+                                    <constraint firstAttribute="height" constant="49" id="tHE-om-Zh5"/>
+                                    <constraint firstAttribute="width" secondItem="GbL-9v-XqN" secondAttribute="height" multiplier="375:49" id="zTc-oQ-3OY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="GbL-9v-XqN" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3SD-62-hzX"/>
+                            <constraint firstItem="GbL-9v-XqN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="6tU-hP-51M"/>
+                            <constraint firstItem="Fzv-du-4Yq" firstAttribute="top" secondItem="MmW-Gi-qgj" secondAttribute="bottom" constant="13" id="8Zw-Xm-Pj3"/>
+                            <constraint firstItem="mUv-Ur-C2d" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Atj-pc-cRX"/>
+                            <constraint firstItem="7Ti-lI-wJx" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="DMy-MF-Xam"/>
+                            <constraint firstItem="Fzv-du-4Yq" firstAttribute="top" secondItem="mUv-Ur-C2d" secondAttribute="bottom" constant="-18" id="Lmf-Ce-obP"/>
+                            <constraint firstItem="MmW-Gi-qgj" firstAttribute="top" secondItem="7Ti-lI-wJx" secondAttribute="bottom" constant="161" id="Lr0-WQ-zd0"/>
+                            <constraint firstItem="MmW-Gi-qgj" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Na2-1A-GXO"/>
+                            <constraint firstItem="Fzv-du-4Yq" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Z91-bc-DZ6"/>
+                            <constraint firstItem="MmW-Gi-qgj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ceK-4S-2G8"/>
+                            <constraint firstItem="GbL-9v-XqN" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="e7h-Be-fRf"/>
+                            <constraint firstItem="Fzv-du-4Yq" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="fJp-on-foC"/>
+                            <constraint firstItem="7Ti-lI-wJx" firstAttribute="top" secondItem="GbL-9v-XqN" secondAttribute="bottom" constant="-49" id="g2j-BX-CC9"/>
+                            <constraint firstItem="7Ti-lI-wJx" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="q08-Qu-JzN"/>
+                            <constraint firstItem="mUv-Ur-C2d" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="qyK-y9-QZM"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
 </document>
