@@ -83,7 +83,7 @@ class JobsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
         SVProgressHUD.dismiss()
     }
-    
+     
       
     // MARKS: Generate random color 4 cells
     func getRandomColor() -> UIColor{
