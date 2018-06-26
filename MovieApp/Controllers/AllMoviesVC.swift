@@ -65,10 +65,6 @@ class AllMoviesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             
             debugPrint("All Response Authorization Token Info: \(String(describing: response))")
             
-            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                print("Data: \(utf8Text)")
-            }
-            
             let jsonData = JSON(response.result.value!)
             let requestToken = jsonData["request_token"].string
             self.moviesInCoreData.token.append(requestToken!)
@@ -84,30 +80,36 @@ class AllMoviesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     func jsonMovies() {
         
         let apiKey = "b66ffea8276ce576d60df52600822c88"
-        
+        let urlString = "https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)"
         SVProgressHUD.show(withStatus: "Loading Movies")
 
-        Alamofire.request("https://api.themoviedb.org/3/movie/popular?api_key=\(apiKey)", method: .post).responseData { response in
+        Alamofire.request(urlString, method: .post).responseData { response in
             
             debugPrint("All Response Movies Info: \(String(describing: response))")
 
-            if((response.result.value != nil)) {
+            switch response.response?.statusCode {
                 
+            case 200:
+ 
                 let jsonData = JSON(response.result.value!)
-                
-                if let arrJSON = jsonData["results"].arrayObject {
                     
+                if let arrJSON = jsonData["results"].arrayObject {
+                        
                     for index in 0...arrJSON.count-1 {
                         let aObject = arrJSON[index] as! [String: Any]
                         let movieDict = Movie.init(with: aObject)
                         self.movie.append(movieDict)
                     }
-                }
-                
+                    
                 SVProgressHUD.dismiss()
                 OperationQueue.main.addOperation({
                     self.collectionView.reloadData()
                 })
+            }
+
+            default:
+                self.displayMyAlertMessage(userMessage: "Please, be ensure that you are connected internet via Wifi")
+                return
             }
         }
     }
@@ -123,21 +125,21 @@ class AllMoviesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+        let poster = self.movie[indexPath.row].poster ?? ""
+        let title = self.movie[indexPath.row].title ?? ""
+        return configCell(indexPath: indexPath, title: title, poster: poster)
+    }
+    
+    func configCell(indexPath: IndexPath, title: String, poster: String) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
-        
         let baseURL = "https://image.tmdb.org/t/p/w500"
-        let postURL = self.movie[indexPath.row].poster
-        let movieTitle = self.movie[indexPath.row].title
-        let imgURL = NSURL(string: baseURL + postURL!)
+        let imgURL = NSURL(string: baseURL + poster)
 
         if imgURL != nil {
             let data = NSData(contentsOf: (imgURL as URL?)!)
             cell.posterImg.image = UIImage(data: data! as Data)
             cell.imageNotFoundedLbl.text = ""
-            cell.titleMovieLbl?.text = movieTitle
-            
-            // Customize image
+            cell.titleMovieLbl?.text = title
             cell.posterImg.layer.cornerRadius = 10
             cell.posterImg.layer.masksToBounds = true
             cell.posterImg.layer.borderWidth = 2
@@ -146,7 +148,6 @@ class AllMoviesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             cell.imageNotFoundedLbl.text = "Poster not founded"
             cell.posterImg.backgroundColor = UIColor.orange
         }
-        
         return cell
     }
     
@@ -285,30 +286,33 @@ class AllMoviesVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                         switch response.response?.statusCode {
                             
                         case 200:
-                            if response.result.value != nil {
+                            let jsonData = JSON(response.result.value!)
+                            let id = jsonData["results"][0]["id"].int32 ?? 0
+                            let title = jsonData["results"][0]["title"].string ?? ""
+                            let originalTitle = jsonData["results"][0]["original_title"].string ?? ""
+                            let popularity = jsonData["results"][0]["popularity"].double ?? 0.0
+                            let poster = jsonData["results"][0]["poster_path"].string ?? ""
+                            let originalLang = jsonData["results"][0]["original_language"].string ?? ""
+                            let overview = jsonData["results"][0]["overview"].string ?? ""
+                            let date = jsonData["results"][0]["release_date"].string ?? ""
+                            let vote = jsonData["results"][0]["vote_average"].double ?? 0.0
                                 
-                                let jsonData = JSON(response.result.value!)
+                            let movieObject = Movie(id: id,
+                                                    title: title,
+                                                    originalTitle: originalTitle,
+                                                    popularity: popularity,
+                                                    poster: poster,
+                                                    originalLanguage: originalLang,
+                                                    overview: overview,
+                                                    date: date,
+                                                    votes: vote)
+                            self.movie.append(movieObject)
                                 
-                                let id = jsonData["results"][0]["id"].int32 ?? 0
-                                let title = jsonData["results"][0]["title"].string ?? ""
-                                let originalTitle = jsonData["results"][0]["original_title"].string ?? ""
-                                let popularity = jsonData["results"][0]["popularity"].double ?? 0.0
-                                let poster = jsonData["results"][0]["poster_path"].string ?? ""
-                                let originalLang = jsonData["results"][0]["original_language"].string ?? ""
-                                let overview = jsonData["results"][0]["overview"].string ?? ""
-                                let date = jsonData["results"][0]["release_date"].string ?? ""
-                                let vote = jsonData["results"][0]["vote_average"].double ?? 0.0
+                            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                            self.saveDataInCoreData(context: context, id: id, title: title, date: date, originalTitle: originalTitle, originalLanguage: originalLang, overview: overview, popularity: popularity, poster: poster, vote: vote)
                                 
-                                let movieObject = Movie(id: id, title: title, originalTitle: originalTitle, popularity: popularity, poster: poster, originalLanguage: originalLang, overview: overview, date: date, votes: vote)
-                                self.movie.append(movieObject)
-                                
-                                // Save data in core data
-                                let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-                                self.saveDataInCoreData(context: context, id: id, title: title, date: date, originalTitle: originalTitle, originalLanguage: originalLang, overview: overview, popularity: popularity, poster: poster, vote: vote)
-                                
-                                // If Movie is finded, show details
-                                self.goToDetailedVC(title: title, date: date, originalTitle: originalTitle, originalLang: originalLang, overview: overview, popularity: popularity, poster: poster, vote: vote)
-                            }
+                            self.goToDetailedVC(title: title, date: date, originalTitle: originalTitle, originalLang: originalLang, overview: overview, popularity: popularity, poster: poster, vote: vote)
+                        
                         default:
                             self.displayMyAlertMessage(userMessage: "We couldn't find your movie/ This movie is not avaiable")
                             return
