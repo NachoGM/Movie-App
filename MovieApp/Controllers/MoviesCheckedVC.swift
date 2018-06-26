@@ -12,54 +12,33 @@ import SVProgressHUD
 
 class MoviesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    // MARKS: Declare Outlets here
+    // MARK: Declare Outlets here
     @IBOutlet weak var tableView: UITableView!
     
-    // MARKS: Declare var here
-    // vars 4 Core Data
-    var movies: [Movies] = []
-    var dates: [Movies] = []
-    var ids: [Movies] = []
-    var posters: [Movies] = []
-    var oMovies: [Movies] = []
-    var oLanguages: [Movies] = []
-    var overviews: [Movies] = []
-    var popularities: [Movies] = []
-    var votes: [Movies] = []
-
-    var allMovies: [String] = []
-    var allDates: [String] = []
-    var allIds: [Int32] = []
-    var allPosters: [String] = []
-    var allOMovies: [String] = []
-    var allOLanguages: [String] = []
-    var allOverviews: [String] = []
-    var allPopularities: [Double] = []
-    var allVotes: [Double] = []
-
+    // MARK: Declare var here
+    var moviesInCoreData = coreDataMovies()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        getData()
-        
-        tableView.dataSource = self
-        tableView.delegate = self
+        loadDataFromCoreData()
+        initTableViewMethods()
         tableView.reloadData()
     }
 
+    func initTableViewMethods() {
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
     
-    // MARKS: Modify Status Bar Color
+    // MARK: Modify Status Bar Color
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        
         return .lightContent
     }
     
-    
-    // MARKS: Get data from Core Data
-    func getData() {
-        SVProgressHUD.show(withStatus: "Loading Movies checked...")
-
+    // MARK: CoreData Methods
+    func loadDataFromCoreData() {
+        SVProgressHUD.show(withStatus: "Loading Movies checked")
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName : "Movies")
@@ -72,50 +51,32 @@ class MoviesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 for result in results as! [NSManagedObject] {
      
                     if let movie = result.value(forKey: "titles") as? String {
-                        allMovies.append(movie)
-                        print("TITLE = \(movie)")
+                        moviesInCoreData.allMovies.append(movie)
                     }
-     
                     if let date = result.value(forKey: "date") as? String {
-                        allDates.append(date)
-                        print("DATE = \(date)")
+                        moviesInCoreData.allDates.append(date)
                     }
-     
                     if let poster = result.value(forKey: "poster") as? String {
-                        allPosters.append(poster)
-                        print("POSTER = \(poster)")
+                        moviesInCoreData.allPosters.append(poster)
                     }
-     
                     if let popularity = result.value(forKey: "popularity") as? Double {
-                        allPopularities.append(popularity)
-                        print("POPULARITY = \(popularity)")
+                        moviesInCoreData.allPopularities.append(popularity)
                     }
-     
                     if let oLanguages = result.value(forKey: "olanguage") as? String {
-                        allOLanguages.append(oLanguages)
-                        print("ORIGINAL LANGUAGE = \(oLanguages)")
+                        moviesInCoreData.allOLanguages.append(oLanguages)
                     }
-     
                     if let id = result.value(forKey: "id") as? Int32 {
-                        allIds.append(id)
-                        print("ID = \(id)")
+                        moviesInCoreData.allIds.append(id)
                     }
-     
                     if let overview = result.value(forKey: "overview") as? String {
-                        allOverviews.append(overview)
-                        print("OVERVIEW = \(overview)")
+                        moviesInCoreData.allOverviews.append(overview)
                     }
-     
                     if let oTitles = result.value(forKey: "otitles") as? String {
-                        allOMovies.append(oTitles)
-                        print("ORIGINAL TITLE = \(oTitles)")
+                        moviesInCoreData.allOMovies.append(oTitles)
                     }
-                    
-                     if let votes = result.value(forKey: "votes") as? Double {
-                        allVotes.append(votes)
-                        print("VOTES = \(votes)")
-                     }
-                    
+                    if let votes = result.value(forKey: "votes") as? Double {
+                        moviesInCoreData.allVotes.append(votes)
+                    }
                 }
             }
             SVProgressHUD.dismiss()
@@ -124,81 +85,61 @@ class MoviesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
     }
     
-    
-    // MARKS: TableView Methods:
+    // MARK: - TableView Methods:
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return self.allMovies.count
+        return moviesInCoreData.titles.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        let title = moviesInCoreData.allMovies[indexPath.row]
+        let overview = moviesInCoreData.allOverviews[indexPath.row]
+        let date = moviesInCoreData.allDates[indexPath.row]
+        let likes = String(moviesInCoreData.allPopularities[indexPath.row])
+        return loadMoviesCell(indexPath: indexPath, title: title, overview: overview, date: date, likes: likes)
+    }
+    
+    func loadMoviesCell(indexPath: IndexPath, title: String, overview: String, date: String, likes: String) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TableViewCell
-         
-        // Cell Info
-        cell.titleMovieLbl.text = allMovies[indexPath.row]
-        cell.overviewLbl.text = allOverviews[indexPath.row]
-        cell.dateMovieLbl.text = allDates[indexPath.row]
-        cell.likesMovieLbl.text = "\(allPopularities[indexPath.row])"
-           
-        // Customice white view
+        cell.titleMovieLbl.text = title
+        cell.overviewLbl.text = overview
+        cell.dateMovieLbl.text = date
+        cell.likesMovieLbl.text = likes
         cell.whiteView.layer.cornerRadius = 10
         cell.whiteView.layer.shadowOpacity = 0.1
         cell.whiteView.layer.shadowColor = UIColor.blue.cgColor
-
-        // Get Image
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        let postURL = self.allPosters[indexPath.row]
         
-        let imgURL = NSURL(string: "\(baseURL)\(postURL)")
+        let baseURL = "https://image.tmdb.org/t/p/w500"
+        let postURL = self.moviesInCoreData.allPosters[indexPath.row]
+        let imgURL = NSURL(string: baseURL + postURL)
         
         if imgURL != nil {
-            
             let data = NSData(contentsOf: (imgURL as URL?)!)
             cell.posterImg.image = UIImage(data: data! as Data)
             cell.posterImg.layer.cornerRadius = 10
             cell.posterImg.layer.masksToBounds = true
             cell.posterImg.layer.borderWidth = 2
             cell.posterImg.layer.borderColor = UIColor.orange.cgColor
-            
         } else {
             cell.posterImg.backgroundColor = UIColor.orange
         }
-        
         return cell
     }
 
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        print("MOVIE = \(self.allMovies[indexPath.row])")
-        print("OVERVIEW = \(self.allOverviews[indexPath.row])")
-        print("DATE = \(self.allDates[indexPath.row])")
-        print("LIKES = \(self.allPopularities[indexPath.row])")
-        print("ORIGINAL NAME = \(self.allOMovies[indexPath.row])")
-        print("ORIGINAL LANG = \(self.allOLanguages[indexPath.row])")
-        print("VOTES = \(self.allVotes[indexPath.row])")
-
         let detailedView = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailedVC") as! MovieDetailedVC
-        
-        detailedView.titleMovie = self.allMovies[indexPath.row]
-         detailedView.overview = self.allOverviews[indexPath.row]
-         detailedView.date = self.allDates[indexPath.row]
-         detailedView.popularity = self.allPopularities[indexPath.row]
-         detailedView.originalTitle = self.allOMovies[indexPath.row]
-         detailedView.originalLanguage = self.allOLanguages[indexPath.row]
-         detailedView.voteAverage = self.allVotes[indexPath.row]
-        detailedView.imageMovie = self.allPosters[indexPath.row]
-        
+        detailedView.titleMovie = moviesInCoreData.allMovies[indexPath.row]
+         detailedView.overview = moviesInCoreData.allOverviews[indexPath.row]
+         detailedView.date = moviesInCoreData.allDates[indexPath.row]
+         detailedView.popularity = moviesInCoreData.allPopularities[indexPath.row]
+         detailedView.originalTitle = moviesInCoreData.allOMovies[indexPath.row]
+         detailedView.originalLanguage = moviesInCoreData.allOLanguages[indexPath.row]
+         detailedView.voteAverage = moviesInCoreData.allVotes[indexPath.row]
+        detailedView.imageMovie = moviesInCoreData.allPosters[indexPath.row]
         present(detailedView, animated: true, completion: nil)
-    
     }
     
-    
-    // MARKS: Declare Button Actions
+    // MARK: - Declare Button Actions
     @IBAction func backBtn(_ sender: Any) {
-       
         dismiss(animated: true, completion: nil)
     }
 

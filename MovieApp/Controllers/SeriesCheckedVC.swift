@@ -12,52 +12,33 @@ import SVProgressHUD
 
 class SeriesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    // MARKS: Declare Outlets here
+    // MARK: Declare Outlets here
     @IBOutlet weak var tableView: UITableView!
     
-     
-    // vars 4 Core Data
-    var series: [Series] = []
-    var dates: [Series] = []
-    var ids: [Series] = []
-    var posters: [Series] = []
-    var oSeries: [Series] = []
-    var oLanguages: [Series] = []
-    var overviews: [Series] = []
-    var popularities: [Series] = []
-    var votes: [Series] = []
-    
-    var allSeries: [String] = []
-    var allDates: [String] = []
-    var allIds: [Int32] = []
-    var allPosters: [String] = []
-    var allOSeries: [String] = []
-    var allOLanguages: [String] = []
-    var allOverviews: [String] = []
-    var allPopularities: [Double] = []
-    var allVotes: [Double] = []
+    // MARK: Declare Variables
+    var seriesInCoreData = coreDataSeries()
 
-    
+    // MARK: - Display LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        getData()
-
-        tableView.dataSource = self
-        tableView.delegate = self
+        loadDataFromCoreData()
+        initTableViewMethods()
         tableView.reloadData()
     }
 
+    func initTableViewMethods() {
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
     
-    // MARKS: Modify Status Bar Color
+    // MARK: Modify Status Bar Color
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        
         return .lightContent
     }
     
-
-     // MARKS: Get data from Core Data
-     func getData() {
+     // MARK: Get data from Core Data
+     func loadDataFromCoreData() {
         
         SVProgressHUD.show(withStatus: "Loading Series checked...")
 
@@ -73,48 +54,31 @@ class SeriesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 for result in results as! [NSManagedObject] {
      
                     if let serie = result.value(forKey: "titles") as? String {
-                        allSeries.append(serie)
-                        print("TITLE = \(serie)")
+                        seriesInCoreData.allSeries.append(serie)
                     }
-     
                     if let date = result.value(forKey: "date") as? String {
-                        allDates.append(date)
-                        print("DATE = \(date)")
+                        seriesInCoreData.allDates.append(date)
                     }
-     
                     if let poster = result.value(forKey: "poster") as? String {
-                        allPosters.append(poster)
-                        print("POSTER = \(poster)")
+                        seriesInCoreData.allPosters.append(poster)
                     }
-     
                     if let popularity = result.value(forKey: "popularity") as? Double {
-                        allPopularities.append(popularity)
-                        print("POPULARITY = \(popularity)")
+                        seriesInCoreData.allPopularities.append(popularity)
                     }
-     
                     if let oLanguages = result.value(forKey: "olanguage") as? String {
-                        allOLanguages.append(oLanguages)
-                        print("ORIGINAL LANGUAGE = \(oLanguages)")
+                        seriesInCoreData.allOLanguages.append(oLanguages)
                     }
-     
                     if let id = result.value(forKey: "id") as? Int32 {
-                        allIds.append(id)
-                        print("ID = \(id)")
+                        seriesInCoreData.allIds.append(id)
                     }
-     
                     if let overview = result.value(forKey: "overview") as? String {
-                        allOverviews.append(overview)
-                        print("OVERVIEW = \(overview)")
+                        seriesInCoreData.allOverviews.append(overview)
                     }
-     
                     if let oTitles = result.value(forKey: "otitles") as? String {
-                        allOSeries.append(oTitles)
-                        print("ORIGINAL TITLE = \(oTitles)")
+                        seriesInCoreData.allOSeries.append(oTitles)
                     }
-                    
                     if let votes = result.value(forKey: "votes") as? Double {
-                        allVotes.append(votes)
-                        print("VOTES = \(votes)")
+                        seriesInCoreData.allVotes.append(votes)
                     }
                 }
             }
@@ -125,73 +89,61 @@ class SeriesCheckedVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
      }
     
-    
-    
-    // MARKS: TableView Methods:
+    // MARK: TableView Methods:
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return self.allSeries.count
+        return self.seriesInCoreData.allSeries.count
     }
     
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        let title = seriesInCoreData.allSeries[indexPath.row]
+        let overview = seriesInCoreData.allOverviews[indexPath.row]
+        let date = seriesInCoreData.allDates[indexPath.row]
+        let likes = "\(seriesInCoreData.allPopularities[indexPath.row])"
+        return loadMoviesCell(indexPath: indexPath, title: title, overview: overview, date: date, likes: likes)
+    }
+    
+    func loadMoviesCell(indexPath: IndexPath, title: String, overview: String, date: String, likes: String) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TableViewCell
-        
-        // Cell Info
-        cell.titleMovieLbl.text = allSeries[indexPath.row]
-        cell.overviewLbl.text = allOverviews[indexPath.row]
-        cell.dateMovieLbl.text = allDates[indexPath.row]
-        cell.likesMovieLbl.text = "\(allPopularities[indexPath.row])"
-        
-        // Customice white view
+        cell.titleMovieLbl.text = title
+        cell.overviewLbl.text = overview
+        cell.dateMovieLbl.text = date
+        cell.likesMovieLbl.text = likes
         cell.whiteView.layer.cornerRadius = 10
         cell.whiteView.layer.shadowOpacity = 0.1
         cell.whiteView.layer.shadowColor = UIColor.blue.cgColor
         
-        // Get Image
         let baseURL = "https://image.tmdb.org/t/p/w500"
-        let postURL = self.allPosters[indexPath.row]
-        
-        let imgURL = NSURL(string: "\(baseURL)\(postURL)")
+        let postURL = self.seriesInCoreData.allPosters[indexPath.row]
+        let imgURL = NSURL(string: baseURL + postURL)
         
         if imgURL != nil {
-            
             let data = NSData(contentsOf: (imgURL as URL?)!)
             cell.posterImg.image = UIImage(data: data! as Data)
-            // Customize image
             cell.posterImg.layer.cornerRadius = 10
             cell.posterImg.layer.masksToBounds = true
             cell.posterImg.layer.borderWidth = 2
-            cell.posterImg.layer.borderColor = UIColor.green.cgColor
+            cell.posterImg.layer.borderColor = UIColor.orange.cgColor
         } else {
             cell.posterImg.backgroundColor = UIColor.orange
         }
-        
         return cell
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let detailedView = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailedVC") as! MovieDetailedVC
-        
-        detailedView.titleMovie = self.allSeries[indexPath.row]
-        detailedView.overview = self.allOverviews[indexPath.row]
-        detailedView.date = self.allDates[indexPath.row]
-        detailedView.popularity = self.allPopularities[indexPath.row]
-        detailedView.originalTitle = self.allOSeries[indexPath.row]
-        detailedView.originalLanguage = self.allOLanguages[indexPath.row]
-        detailedView.voteAverage = allVotes[indexPath.row]
-        detailedView.imageMovie = allPosters[indexPath.row]
-        
+        detailedView.titleMovie = seriesInCoreData.allSeries[indexPath.row]
+        detailedView.overview = seriesInCoreData.allOverviews[indexPath.row]
+        detailedView.date = seriesInCoreData.allDates[indexPath.row]
+        detailedView.popularity = seriesInCoreData.allPopularities[indexPath.row]
+        detailedView.originalTitle = seriesInCoreData.allOSeries[indexPath.row]
+        detailedView.originalLanguage = seriesInCoreData.allOLanguages[indexPath.row]
+        detailedView.voteAverage = seriesInCoreData.allVotes[indexPath.row]
+        detailedView.imageMovie = seriesInCoreData.allPosters[indexPath.row]
         present(detailedView, animated: true, completion: nil)
     }
     
-    
-    // MARKS: Declare Button Actions
+    // MARK: - Declare Button Actions
     @IBAction func backBtn(_ sender: Any) {
-        
         dismiss(animated: true, completion: nil)
     }
     

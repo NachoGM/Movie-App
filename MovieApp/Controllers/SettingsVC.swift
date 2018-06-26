@@ -14,40 +14,31 @@ import WebKit
 
 class SettingsVC: UIViewController {
 
-    
-    // MARKS: Declare Outlets here
+    // MARK: Declare Outlets here
     @IBOutlet weak var webView: UIWebView!
     
-    
-    // MARKS: Declare Vars here
+    // MARK: Declare Vars here
     var token = String()
     var tokenAuth = UserDefaults.standard.string(forKey: "Token")
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(self.tokenAuth!)
 
         jsonAuth()
     }
 
-      
-    // MARKS: Modify Status Bar Color
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        
         return .lightContent
     }
    
      
-    // MARKS: JSON Auth
+    // MARK: - JSON Auth
     func jsonAuth() {
         
         SVProgressHUD.show(withStatus: "Loading More Info...")
         
         Alamofire.request("https://www.themoviedb.org/authenticate/\(self.tokenAuth!)?redirect_to=http://www.MovieApp.com/approved", method: .get).responseData { response in
-            
-            debugPrint("All Response Permissions Info: \(String(describing: response))")
-            
+                        
             if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
                 
                 // original server data as UTF8 string

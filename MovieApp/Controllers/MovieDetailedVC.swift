@@ -13,9 +13,8 @@ import CoreData
 import SystemConfiguration
 
 class MovieDetailedVC: UIViewController {
-
     
-    // MARKS: Declare Outlets here
+    // MARK: - Declare Outlets here
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var originalTitleLbl: UILabel!
     @IBOutlet weak var dateLbl: UILabel!
@@ -36,9 +35,9 @@ class MovieDetailedVC: UIViewController {
     @IBOutlet weak var baseView: UIView!
     @IBOutlet weak var votesView: UIView!
     @IBOutlet weak var votesLbl: UILabel!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    
-    // MARKS: Declare var here
+    // MARK: Declare var here
     var id:Int32!
     var imageMovie:String!
     var titleMovie:String!
@@ -50,65 +49,27 @@ class MovieDetailedVC: UIViewController {
     var date:String!
     var voteAverage:Double!
     
-    
+    // MARK: Display LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         updateUI()
-
         customView()
-        
         self.view.reloadInputViews()
-    }
-    
-    
-    // MARKS: Segmented Control 4 display details and seasons
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBAction func segmentedControl(_ sender: UISegmentedControl) {
-        
-        switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            print("Detailed")
-
-            baseBlueView.isHidden = true
-            baseDetailView.isHidden = false
-     
-        case 1:
-            print("Watch")
- 
-             // Enable 2nd view with seasons or links
-            baseBlueView.backgroundColor = UIColor.white
-            baseDetailView.isHidden = true
-            baseBlueView.isHidden = false
- 
-            // Display dialog
-            displayDialogMoreInfo()
-            return;
-            
-        default:
-            view.addSubview(baseDetailView)
-            print("Detailed")
-            return;
-        }
-        
     }
     
     func displayDialogMoreInfo(){
         let alert = UIAlertController(title: "More Info", message: "Be a filmaniatic!", preferredStyle: .alert)
-        
         let firstAction = UIAlertAction(title: "Watch Movie", style: .default) { (alert: UIAlertAction!) -> Void in
-            
             self.displayMyAlertMessage(userMessage: "End Trial App")
         }
         
         let secondAction = UIAlertAction(title: "Download Movie", style: .default) { (alert: UIAlertAction!) -> Void in
-            
             self.displayMyAlertMessage(userMessage: "End Trial App")
         }
         
         let thirdAction = UIAlertAction(title: "Back", style: .destructive) { (alert: UIAlertAction!) -> Void in
             NSLog("Back")
-            
             return
         }
         
@@ -119,24 +80,20 @@ class MovieDetailedVC: UIViewController {
         present(alert, animated: true, completion:nil)
     }
     
-    
-    // MARKS: Customize View 4 baseDetailView
+    // MARK: Customize View 4 baseDetailView
     func customView() {
-        
-        // Shadow
         whiteView.layer.shadowOpacity = 0.1
         whiteView1.layer.shadowOpacity = 0.1
         whiteView2.layer.shadowOpacity = 0.1
         infoBtn.layer.shadowOpacity = 0.1
         segmentedControl.layer.shadowOpacity = 0.1
-
+        
         whiteView.layer.shadowColor = UIColor.blue.cgColor
         whiteView1.layer.shadowColor = UIColor.blue.cgColor
         whiteView2.layer.shadowColor = UIColor.blue.cgColor
         infoBtn.layer.shadowColor = UIColor.blue.cgColor
         segmentedControl.layer.shadowColor = UIColor.blue.cgColor
-
-        // Rounded corners
+        
         whiteView.layer.cornerRadius = 10
         whiteView1.layer.cornerRadius = 10
         whiteView2.layer.cornerRadius = 10
@@ -147,17 +104,8 @@ class MovieDetailedVC: UIViewController {
         votesView.layer.cornerRadius = 40
     }
     
-    
-    // MARKS: Update Movie Information
+    // MARK: Update Movie Information
     func updateUI() {
-        print("MOVIE = \(self.titleMovie ?? "")")
-        print("OVERVIEW = \(self.overview ?? "")")
-        print("DATE = \(self.date ?? "")")
-        print("LIKES = \(self.popularity!)")
-        print("ORIGINAL NAME = \(self.originalTitle ?? "")")
-        print("ORIGINAL LANG = \(self.originalLanguage ?? "")")
-        print("VOTES = \(self.voteAverage!)")
-        
         // Update Labels
         self.titleLbl.text = self.titleMovie ?? ""
         self.originalTitleLbl.text = self.originalTitle ?? ""
@@ -166,73 +114,66 @@ class MovieDetailedVC: UIViewController {
         self.dateLbl.text = self.date ?? ""
         self.overviewLbl.text = self.overview ?? ""
         self.votesLbl.text = "\(self.voteAverage!)"
- 
+        
         // Update Image
         let baseURL = "https://image.tmdb.org/t/p/w500"
         let postURL = "\(self.imageMovie!)"
         let imgURL = NSURL(string: "\(baseURL)\(String(describing: postURL))")
         
         if imgURL != nil {
-            
             let data = NSData(contentsOf: (imgURL as URL?)!)
             self.posterImageView.image = UIImage(data: data! as Data)
             self.posterNotFoudedLbl.text = ""
         } else {
-            
             self.posterImageView.backgroundColor = UIColor.purple
             self.posterNotFoudedLbl.text = "No Poster Founded"
         }
     }
     
-
-    // MARKS: Modify Status Bar Color
+    // MARK: Modify Status Bar Color
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        
         return .lightContent
     }
     
-    
-    // MARKS: Alert Dialog
+    // MARK: Alert Dialog
     func displayMyAlertMessage(userMessage: String) {
-        
         let myAlert = UIAlertController(title:"Ups...", message: userMessage, preferredStyle: UIAlertControllerStyle.alert);
         let okAction = UIAlertAction(title: "Understood", style: UIAlertActionStyle.default, handler: nil);
         myAlert.addAction(okAction);
         self.present(myAlert, animated: true, completion: nil);
     }
     
-
-    // MARKS: Declare Button Actions
-    @IBAction func backBtn(_ sender: Any) {
-       
-        dismiss(animated: true, completion: nil)
-    }
-    
-    
-    @IBAction func moreInfoBtn(_ sender: Any) {
+    // MARK: - Declare Button Actions
+    @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         
-        let alert = UIAlertController(title: "More Info", message: "Be a filmaniatic!", preferredStyle: .alert)
-        
-        let firstAction = UIAlertAction(title: "Watch Movie", style: .default) { (alert: UIAlertAction!) -> Void in
-
-            self.displayMyAlertMessage(userMessage: "End Trial App")
-        }
-        
-        let secondAction = UIAlertAction(title: "Download Movie", style: .default) { (alert: UIAlertAction!) -> Void in
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            NSLog("Detailed")
+            baseBlueView.isHidden = true
+            baseDetailView.isHidden = false
+     
+        case 1:
+            NSLog("Watch")
+            baseBlueView.backgroundColor = UIColor.white
+            baseDetailView.isHidden = true
+            baseBlueView.isHidden = false
+            displayDialogMoreInfo()
+            return
             
-            self.displayMyAlertMessage(userMessage: "End Trial App")
-        }
-        
-        let thirdAction = UIAlertAction(title: "Back", style: .destructive) { (alert: UIAlertAction!) -> Void in
-            
+        default:
+            view.addSubview(baseDetailView)
+            NSLog("Detailed")
             return
         }
         
-        alert.addAction(firstAction)
-        alert.addAction(secondAction)
-        alert.addAction(thirdAction)
-        
-        present(alert, animated: true, completion:nil)
+    }
+    
+    @IBAction func backBtn(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func moreInfoBtn(_ sender: Any) {
+        displayDialogMoreInfo()
     }
     
 }
